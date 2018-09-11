@@ -13,7 +13,7 @@ def read(fname):
 
 
 setup(
-    name="superness",
+    name="sness",
     version="0.0.1",
     description="LuizaLabs' datalake lib ",
     keywords="spark gcp etl",
