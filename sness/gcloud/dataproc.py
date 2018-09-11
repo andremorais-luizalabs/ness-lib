@@ -3,28 +3,33 @@ import os
 import time
 import googleapiclient.discovery
 from google.cloud import storage
+from ..config import config
 
-DEFAULT_FILENAME = 'pyspark_sort.py'
+zone = config.ZONE
+region = config.REGION
+project = config.PROJECT
+
+
+# [START get_client]
+def get_client():
+    """Builds an http client authenticated with the service account
+    credentials."""
+    dataproc = googleapiclient.discovery.build('dataproc', 'v1')
+    return dataproc
+
+# [END get_client]
 
 
 def get_default_pyspark_file():
     """Gets the PySpark file from this directory"""
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    f = open(os.path.join(current_dir, DEFAULT_FILENAME), 'rb')
-    return f, DEFAULT_FILENAME
+    f = open(os.path.join(current_dir), 'rb')
+    return f
 
 
 def get_pyspark_file(filename):
     f = open(filename, 'rb')
     return f, os.path.basename(filename)
-
-
-def get_region_from_zone(zone):
-    try:
-        region_as_list = zone.split('-')[:-1]
-        return '-'.join(region_as_list)
-    except (AttributeError, IndexError, ValueError):
-        raise ValueError('Invalid zone provided, please check your input.')
 
 
 def upload_pyspark_file(project_id, bucket_name, filename, file):
@@ -45,12 +50,23 @@ def download_output(project_id, cluster_id, output_bucket, job_id):
     bucket = client.get_bucket(output_bucket)
     output_blob = (
         'google-cloud-dataproc-metainfo/{}/jobs/{}/driveroutput.000000000'
-        .format(cluster_id, job_id))
+            .format(cluster_id, job_id))
     return bucket.blob(output_blob).download_as_string()
 
 
 # [START create_cluster]
-def create_cluster(dataproc, project, zone, region, cluster_name, number_nodes=10, cpu=16):
+def create_cluster(client, project, zone, region, cluster_name, number_nodes=10, cpu=16):
+    """
+    Create a dataproc cluster on SuperNess platform
+    :param client: dataproc client
+    :param project:
+    :param zone:
+    :param region:
+    :param cluster_name:
+    :param number_nodes:
+    :param cpu:
+    :return:
+    """
     print('Creating cluster...')
     zone_uri = \
         'https://www.googleapis.com/compute/v1/projects/{}/zones/{}'.format(
@@ -62,9 +78,9 @@ def create_cluster(dataproc, project, zone, region, cluster_name, number_nodes=1
             'gceClusterConfig': {
                 'zoneUri': zone_uri,
                 'metadata': {
-                        "JUPYTER_PORT": "8124",
-                        "JUPYTER_CONDA_PACKAGES": "numpy:pandas:scikit-learn"
-                        }
+                    "JUPYTER_PORT": "8124",
+                    "JUPYTER_CONDA_PACKAGES": "numpy:pandas:scikit-learn"
+                }
             },
             "configBucket": "prd-cluster-exploration",
             'masterConfig': {
@@ -89,19 +105,21 @@ def create_cluster(dataproc, project, zone, region, cluster_name, number_nodes=1
                     "spark:spark.yarn.driver.memoryOverhead": "2048",
                     "spark:spark.yarn.executor.memoryOverhead": "2048"
                 }
-        },
+            },
             "initializationActions": {
                 "executableFile": "gs://prd-cluster-config/dataproc/jupyter.sh",
                 "executionTimeout": "600s"
-                }
+            }
         }
     }
 
-    result = dataproc.projects().regions().clusters().create(
+    result = client.projects().regions().clusters().create(
         projectId=project,
         region=region,
         body=cluster_data).execute()
     return result
+
+
 # [END create_cluster]
 
 
@@ -136,6 +154,8 @@ def list_clusters_with_details(dataproc, project, region):
         return result
     except KeyError:
         return None
+
+
 # [END list_clusters_with_detail]
 
 
@@ -149,6 +169,7 @@ def list_clusters(dataproc, project, region):
         return lista
     except KeyError:
         return list()
+
 
 def get_cluster_id_by_name(cluster_list, cluster_name):
     """Helper function to retrieve the ID and output bucket of a cluster by
@@ -182,6 +203,8 @@ def submit_pyspark_job(dataproc, project, region,
     if monitor:
         return wait_for_job(dataproc, project, region, job_id)
     return job_id
+
+
 # [END submit_pyspark_job]
 
 
@@ -193,6 +216,8 @@ def delete_cluster(dataproc, project, region, cluster):
         region=region,
         clusterName=cluster).execute()
     return result
+
+
 # [END delete]
 
 
@@ -212,27 +237,16 @@ def wait_for_job(dataproc, project, region, job_id):
             return result
         time.sleep(10)
 
+
 # [END wait]
-
-
-# [START get_client]
-def get_client():
-    """Builds an http client authenticated with the service account
-    credentials."""
-    dataproc = googleapiclient.discovery.build('dataproc', 'v1')
-    return dataproc
-# [END get_client]
 
 
 def main(project_id, zone, cluster_name, bucket_name,
          pyspark_file=None, create_new_cluster=True):
     dataproc = get_client()
-    region = get_region_from_zone(zone)
     try:
         if pyspark_file:
             spark_file, spark_filename = get_pyspark_file(pyspark_file)
-        else:
-            spark_file, spark_filename = get_default_pyspark_file()
 
         if create_new_cluster:
             create_cluster(

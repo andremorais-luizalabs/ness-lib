@@ -23,8 +23,8 @@ setup(
         "pandas==0.23.4", "scikit-learn==0.19.2", "fire==0.1.3"
     ],
     packages=[
-        '.', 'gcloud', 'utils',
-        'config'
+        'sness', 'sness.gcloud', 'sness.utils',
+        'sness.config'
     ],
     long_description=read('readme.md'),
     classifiers=[
