@@ -6,9 +6,9 @@ SNess is the lib that supports the (data) Lake Ness. This lib is meant to be the
 
 
 #How to Use
-    make
-    pip install dist/sness-0.0.*.whl
- 
+     make
+     pip install dist/sness-0.0.*.whl
+ </br>
 In your .py file
-    import sness
-    help(sness.dataproc.create_cluster)
+     import sness
+     help(sness.dataproc.create_cluster)
