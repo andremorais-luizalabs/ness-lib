@@ -109,6 +109,9 @@ def create_cluster(client, project, zone, region, cluster_name, number_nodes=10,
             "initializationActions": {
                 "executableFile": "gs://prd-cluster-config/dataproc/jupyter.sh",
                 "executionTimeout": "600s"
+            },
+            "lifecycleConfig": {
+                "idleDeleteTtl": "3600s"
             }
         }
     }
