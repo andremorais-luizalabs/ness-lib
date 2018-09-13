@@ -1,12 +1,23 @@
-import requests
-import json
+from ..config.config import HOOK
+from airflow import configuration
+from airflow.operators.slack_operator import SlackAPIPostOperator
 
-def send_slack(name="Spark_Monit", receiver="#data engineering", message=None, 
-				web_hook='https://hooks.slack.com/services/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'):
+def slack_failed_task(context):
 
-	payload={"channel": receiver, 
-		   "username": name, 
-		   "text": str(message), 
-		   "icon_emoji": ":fausto:"}
-	
-	return requests.post(web_hook, data=json.dumps(payload))
+    link = '<{base_url}/admin/airflow/log?dag_id={dag_id}&task_id={task_id}&execution_date={execution_date}|logs>'.format(
+        base_url=configuration.get('webserver', 'BASE_URL'),
+        dag_id = context['dag'].dag_id,
+        task_id = context['task_instance'].task_id,
+        execution_date = context['ts']))  # equal to context['execution_date'].isoformat())
+
+    failed_alert = SlackAPIPostOperator(
+        task_id='slack_failed',
+        channel="#mychannel",
+        token=HOOK,
+        text=':red_circle: Failure on: ' +
+             str(context['dag']) +
+             '\nRun ID: ' + str(context['run_id']) +
+             '\nTask: ' + str(context['task_instance']) +
+             '\nSee ' + link + ' to debug')
+
+    return failed_alert.execute(context=context)
