@@ -1,8 +1,9 @@
-ZONE = "global"
-REGION = "us-east1-b"
+REGION = "global"
+ZONE = "us-east1-b"
 PROJECT = "maga-bigdata"
 FOO = "xBC7vDcmvqD49qif"
 HOOK = 'xoxb-2151854096-434318528545-Hn9EvQw26siSLmFE23cfPWp7'
+DEFAULT_CLUSTER_NAME = "prd-cluster-jobs"
 BUCKETS = {
     "zone": {
         "transient":
