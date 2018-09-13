@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators import DummyOperator, PythonOperator, SlackAPIOperator
-from sness.gcloud.dataproc import get_client, list_clusters, create_cluster, wait_for_cluster_creation
-from sness.config import config
-from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator, DataprocClusterCreateOperator
+from airflow.operators.dummy_operator import DummyOperator
 from sness.utils.slack_utils import slack_failed_task
-DEFAULT_CLUSTER_NAME = "prd-cluster-jobs"
-
+from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
+from sness.config.config import DEFAULT_CLUSTER_NAME
+from sness.utils.aiflow_utils import DataprocClusterCrea
 
 default_args = {
     'owner': 'Data Engineering',
@@ -16,26 +14,14 @@ default_args = {
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
     'start_date': datetime(2018, 9, 8),
-    'on_failure_callback': slack_failed_task}
+    'on_failure_callback': slack_failed_task,}
 
 dag = DAG('AtenaTransientToRaw', default_args=default_args)
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
 
-
-def cluster_creation():
-    gclient = get_client()
-    cluster_list = list_clusters(gclient, config.PROJECT, config.REGION)
-    if DEFAULT_CLUSTER_NAME not in cluster_list:
-        create_cluster(gclient, config.PROJECT, config.ZONE, config.REGION, DEFAULT_CLUSTER_NAME)
-        wait_for_cluster_creation(gclient, config.PROJECT, config.REGION, DEFAULT_CLUSTER_NAME)
-
-
-ClusterStep = PythonOperator(
-            task_id='Cluster_creation',
-            python_callable=cluster_creation)
-
+CreateCluster = DataprocClusterCrea(dag)
 
 OnlineOrder = DataProcPySparkOperator(
     task_id='online_pedido_transient_to_raw',
@@ -48,4 +34,4 @@ OnlineOrder = DataProcPySparkOperator(
     dag=dag)
 
 
-inicio >> ClusterStep >> OnlineOrder >> fim
+inicio >> CreateCluster >> OnlineOrder >> fim

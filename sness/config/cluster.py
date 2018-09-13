@@ -21,3 +21,4 @@ METADATA = {
 
 MASTER_MACHINE_TYPE="n1-standard-16"
 WORKER_MACHINE_TYPE="n1-standard-16"
+ACTION_SCRIPTS = ["gs://prd-cluster-config/dataproc/jupyter.sh"]
