@@ -7,13 +7,12 @@ default_args = {
     'owner': 'Data Engineering',
     'depends_on_past': False,
     'description': 'Move os arquivos do bucket Transient do Atena para o bucket Raw transformando-os em parquet via pyspark.',
-    'schedule_interval': '* * * * *',
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
     'start_date': datetime(2018, 9, 8)
 }
 
-dag = DAG('SetupDags', default_args=default_args)
+dag = DAG('SetupDags', default_args=default_args, schedule_interval='*/5 * * * *')
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
