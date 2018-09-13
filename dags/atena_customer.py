@@ -59,7 +59,8 @@ SingleCustomer = DataProcPySparkOperator(
 
 DeleteCluster = DataprocClusterDelete(dag)
 
-inicio.set_downstream([OnlineCustomer, GemcoCustomer])
+inicio.set_downstream(CreateCluster)
+CreateCluster.set_downstream([OnlineCustomer, GemcoCustomer])
 SingleCustomer.set_upstream([OnlineCustomer, GemcoCustomer])
 DeleteCluster.set_upstream(SingleCustomer)
 fim.set_upstream(DeleteCluster)
