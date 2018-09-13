@@ -25,7 +25,7 @@ CreateCluster = DataprocClusterCreate(dag)
 
 OnlineOrder = DataProcPySparkOperator(
     task_id='online_pedido_transient_to_raw',
-    main='gs://prd-cluster-jobs/pyspark/raw/actions_transient_to_raw.py',
+    main='gs://prd-cluster-config/etls/raw/atena/online-pedido.py',
     job_name='AtenaOnlineOrderTransientToRaw',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
