@@ -21,6 +21,7 @@ def DataprocClusterCreate(dag):
 
 def DataprocClusterDelete(dag):
     return DataprocClusterDeleteOperator(
+        task_id='delete_dataproc_cluster',
         cluster_name=DEFAULT_CLUSTER_NAME,
         project_id=PROJECT,
         region=REGION,
