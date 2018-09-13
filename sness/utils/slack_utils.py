@@ -2,6 +2,7 @@ from ..config.config import HOOK
 from airflow import configuration
 from airflow.operators.slack_operator import SlackAPIPostOperator
 
+
 def slack_failed_task(context):
 
     link = '<{base_url}/admin/airflow/log?dag_id={dag_id}&task_id={task_id}&execution_date={execution_date}|logs>'.format(

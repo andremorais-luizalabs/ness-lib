@@ -1,4 +1,4 @@
-.PHONY: clean build
+.PHONY: clean build deploy
 .DEFAULT_GOAL := build
 
 clean:
@@ -13,5 +13,7 @@ build: clean
 	python setup.py bdist_wheel
 	pip install dist/sness-0.0.1-py2-none-any.whl
 
-# deploy: clean build
-	# cp ./dist/superness-0.0.1-py2-none-any.whl gs://prd-cluster-config/wheels/superness-0.0.1-py2-none-any.whl
+
+deploy: build
+    gsutil -m cp -r sness/ gs://us-east1-ness-maestro-782d5135-bucket/dags/
+

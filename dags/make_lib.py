@@ -7,26 +7,30 @@ default_args = {
     'owner': 'Data Engineering',
     'depends_on_past': False,
     'description': 'Move os arquivos do bucket Transient do Atena para o bucket Raw transformando-os em parquet via pyspark.',
-    'schedule_interval': '30 9 * * *',
+    'schedule_interval': 'H/5 * * * *',
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
     'start_date': datetime(2018, 9, 8)
 }
 
-dag = DAG('AtenaTransientToRaw', default_args=default_args)
+dag = DAG('make_lib', default_args=default_args)
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
-pull_and_make = BashOperator(
+
+pullMake = BashOperator(
     task_id = "pull_and_make_lib",
     bash_command = "git clone https://github.com/luizalabs/ness-lib.git && cd ness-lib && make",
     dag=dag)
 
-
-install_lib = BashOperator(
-    task_id = "install_lib",
-    bash_command = "pip install dist/sness-0.0.1-py2-none-any.whl",
+uploadLibGcp= BashOperator(
+    task_id = "upload_Lib_Airflow",
+    bash_command = "gsutil -m cp -r sness/ gs://us-east1-ness-maestro-782d5135-bucket/dags/",
     dag=dag)
 
+uploadDagsGcp= BashOperator(
+    task_id = "upload_dags_Airflow",
+    bash_command = "gsutil -m cp -r dags/ gs://us-east1-ness-maestro-782d5135-bucket/dags/",
+    dag=dag)
 
-inicio >> pull_and_make >> install_lib >> fim
+inicio >> pullMake >> uploadLibGcp >> fim
