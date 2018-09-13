@@ -25,7 +25,7 @@ uploadLibGcp= BashOperator(
 
 uploadDagsGcp= BashOperator(
     task_id = "upload_dags_Airflow",
-    bash_command = "git clone https://github.com/luizalabs/ness-lib.git && cd ness-lib && gsutil -m cp dags/ gs://us-east1-ness-maestro-782d5135-bucket/dags/",
+    bash_command = "git clone https://github.com/luizalabs/ness-lib.git && cd ness-lib && gsutil -m cp dags/* gs://us-east1-ness-maestro-782d5135-bucket/dags/",
     dag=dag)
 
 
