@@ -1,4 +1,4 @@
-.PHONY: clean build deploy
+.PHONY: clean build
 .DEFAULT_GOAL := build
 
 clean:
