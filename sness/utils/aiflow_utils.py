@@ -1,7 +1,7 @@
 from ..config.cluster import *
 from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator
 
-def DataprocClusterCrea(dag):
+def DataprocClusterCreate(dag):
     return DataprocClusterCreateOperator(
             task_id='create_dataproc_cluster',
             project_id=PROJECT,

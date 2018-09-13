@@ -4,7 +4,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from sness.utils.slack_utils import slack_failed_task
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 from sness.config.config import DEFAULT_CLUSTER_NAME
-from sness.utils.aiflow_utils import DataprocClusterCrea
+from sness.utils.aiflow_utils import DataprocClusterCreate
 
 default_args = {
     'owner': 'Data Engineering',
@@ -21,7 +21,7 @@ dag = DAG('AtenaTransientToRaw', default_args=default_args)
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
 
-CreateCluster = DataprocClusterCrea(dag)
+CreateCluster = DataprocClusterCreate(dag)
 
 OnlineOrder = DataProcPySparkOperator(
     task_id='online_pedido_transient_to_raw',
