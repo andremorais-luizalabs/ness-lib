@@ -1,5 +1,5 @@
 from ..config.cluster import *
-from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator
+from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator
 
 def DataprocClusterCreate(dag):
     return DataprocClusterCreateOperator(
@@ -18,3 +18,11 @@ def DataprocClusterCreate(dag):
             num_preemptible_workers=10,
             graceful_decommission_timeout='1h',
             dag=dag)
+
+def DataprocClusterDelete(dag):
+    return DataprocClusterDeleteOperator(
+        cluster_name=DEFAULT_CLUSTER_NAME,
+        project_id=PROJECT,
+        region=REGION,
+        dag=dag
+    )
