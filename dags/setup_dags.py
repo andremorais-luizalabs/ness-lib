@@ -13,7 +13,7 @@ default_args = {
     'start_date': datetime(2018, 9, 8)
 }
 
-dag = DAG('make_lib', default_args=default_args)
+dag = DAG('SetupDags', default_args=default_args)
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
