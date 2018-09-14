@@ -15,7 +15,7 @@ default_args = {
     'start_date': datetime(2018, 9, 14),
     'on_failure_callback': slack_failed_task,}
 
-dag = DAG('AtenaSingleCustomer', default_args=default_args, schedule_interval='* 5 * * * ', max_active_runs=1)
+dag = DAG('AtenaSingleCustomer', default_args=default_args, schedule_interval='0 5 * * * ', max_active_runs=1)
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
