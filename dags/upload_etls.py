@@ -10,8 +10,8 @@ default_args = {
     'description': 'Move os arquivos de ETL para o bucket de config.',
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2018, 9, 8),
-    'on_failure_callback': slack_failed_task}
+    'start_date': datetime(2018, 9, 14),
+    'on_failure_callback': slack_failed_task,}
 
 dag = DAG('UploadEtls', default_args=default_args, schedule_interval="@hourly")
 
