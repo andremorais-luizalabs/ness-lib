@@ -35,7 +35,7 @@ OnlineCustomer = DataProcPySparkOperator(
 
 GemcoCustomer = DataProcPySparkOperator(
     task_id='atena_gemco_customer',
-    main='gs://prd-cluster-config',
+    main='gs://prd-cluster-config/etls/raw/atena/gemco_customers.py',
     job_name='AtenaGemcoCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
