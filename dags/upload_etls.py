@@ -8,13 +8,12 @@ default_args = {
     'owner': 'Data Engineering',
     'depends_on_past': False,
     'description': 'Move os arquivos de ETL para o bucket de config.',
-    'schedule_interval': '30 * * * *',
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
     'start_date': datetime(2018, 9, 8),
-    'on_failure_callback': slack_failed_task,}
+    'on_failure_callback': slack_failed_task}
 
-dag = DAG('UploadEtls', default_args=default_args)
+dag = DAG('UploadEtls', default_args=default_args, schedule_interval="@hourly")
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
