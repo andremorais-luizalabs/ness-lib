@@ -11,7 +11,7 @@ def slack_failed_task(context):
         execution_date = context['ts'])
     failed_alert = SlackAPIPostOperator(
         task_id='slack_failed',
-        channel="#mychannel",
+        channel="#data-engineer-datena",
         token=HOOK,
         text=':red_circle: Failure on: ' + str(context['dag']) + '\nRun ID: ' \
              + str(context['run_id']) +'\nTask: ' + str(context['task_instance']) \
