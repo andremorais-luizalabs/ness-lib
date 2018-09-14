@@ -14,7 +14,7 @@ default_args = {
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
     'start_date': datetime(2018, 9, 8),
-    'on_failure_callback': slack_failed_task,}
+    'on_failure_callback': slack_failed_task}
 
 dag = DAG('AtenaPedidoOnline', default_args=default_args)
 
