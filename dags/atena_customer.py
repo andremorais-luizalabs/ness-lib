@@ -10,13 +10,12 @@ default_args = {
     'owner': 'Data Engineering',
     'depends_on_past': False,
     'description': 'Move os arquivos do bucket Transient do Atena para o bucket Raw transformando-os em parquet via pyspark.',
-    'schedule_interval': '30 * * * *',
     'retries': 5,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2018, 9, 8),
+    'start_date': datetime(2018, 9, 14),
     'on_failure_callback': slack_failed_task,}
 
-dag = DAG('AtenaSingleCustomer', default_args=default_args)
+dag = DAG('AtenaSingleCustomer', default_args=default_args, schedule_interval='* 5 * * * ')
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
@@ -25,7 +24,7 @@ CreateCluster = DataprocClusterCreate(dag)
 
 OnlineCustomer = DataProcPySparkOperator(
     task_id='atena_online_customer',
-    main='gs://prd-cluster-config/etls/raw/atena/online_customer.py',
+    main='gs://prd-cluster-config/etls/raw/atena/online_customers.py',
     job_name='AtenaOnlineCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
@@ -36,7 +35,7 @@ OnlineCustomer = DataProcPySparkOperator(
 
 GemcoCustomer = DataProcPySparkOperator(
     task_id='atena_gemco_customer',
-    main='gs://prd-cluster-config/etls/raw/atena/Gemco_customer.py',
+    main='gs://prd-cluster-config',
     job_name='AtenaGemcoCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
