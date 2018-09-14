@@ -12,7 +12,7 @@ default_args = {
     'start_date': datetime(2018, 9, 8)
 }
 
-dag = DAG('SetupDags', default_args=default_args, schedule_interval='@hourly')
+dag = DAG('SetupDags', default_args=default_args, schedule_interval='@hourly', max_active_runs=1)
 
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
