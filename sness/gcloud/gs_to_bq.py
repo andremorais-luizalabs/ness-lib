@@ -1,10 +1,6 @@
-import subprocess
-import datetime
-import time
 import os
 import logging
 import sys
-import fire
 from google.cloud import storage
 from google.cloud import bigquery
 from google.api_core.exceptions import NotFound
@@ -124,7 +120,3 @@ def load_tables_from_uri(blob_uri, dataset_id, table_id):
 
 def get_non_processed_blobs(blobs, processed_blobs):
     return [x for x in blobs if x not in processed_blobs]
-
-
-if __name__ == '__main__':
-    fire.Fire(run_import)
