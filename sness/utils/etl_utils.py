@@ -10,5 +10,4 @@ def remove_accents(str_input):
     return ''.join((c for c in normalize('NFD', str_input) if category(c) != 'Mn'))
 
 
-remove_accents_udf = udf(remove_accents)
 
