@@ -32,16 +32,6 @@ def get_pyspark_file(filename):
     return f, os.path.basename(filename)
 
 
-def upload_pyspark_file(project_id, bucket_name, filename, file):
-    """Uploads the PySpark file in this directory to the configured
-    input bucket."""
-    print('Uploading pyspark file to GCS')
-    client = storage.Client(project=project_id)
-    bucket = client.get_bucket(bucket_name)
-    blob = bucket.blob(filename)
-    blob.upload_from_file(file)
-
-
 def download_output(project_id, cluster_id, output_bucket, job_id):
     """Downloads the output file from Cloud Storage and returns it as a
     string."""
