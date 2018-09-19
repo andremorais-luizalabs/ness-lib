@@ -1,6 +1,3 @@
-import subprocess
-import datetime
-import time
 import os
 import logging
 import sys
@@ -11,10 +8,13 @@ from google.api_core.exceptions import NotFound
 
 '''
 Example run
-python pispark.py --bucket prd-lake-raw-stewie --prefix actions/day_interacted_at=2018-08-28/ --dataset stewie --table actions_raw
+python pispark.py --bucket prd-lake-raw-stewie 
+--prefix actions/day_interacted_at=2018-08-28/ 
+--dataset stewie 
+--table actions_raw
 '''
 CHECKPOINT_FOLDER_PREFIX = '_gsbq_metadata/'
-TEMP_PATH = '/tmp/processed_blobs.txt'
+TEMP_PATH = '/home/airflow/gcs/data/processed_blobs.txt'
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO, stream=sys.stdout)
 
 
@@ -83,7 +83,8 @@ def parse_processed_blob_names(path):
             processed_blobs = f.read().split('\n')
             return [blob for blob in processed_blobs if len(blob) > 0]
     except OSError:
-        logging.warn('Did not find checkpoint file in temp location. If this is the first execution for given parameters, the file will be created automatically')
+        logging.warning('Did not find checkpoint file in temp location. '
+                        'If this is the first execution for given parameters, the file will be created automatically')
         return []
 
 
@@ -94,7 +95,8 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
     try:
         blob.download_to_filename(destination_file_name)
     except (NotFound, OSError):
-        logging.warn('Did not find a checkpoint file for given prefix and bucket. If this is the first execution for given parameters, the file will be created automatically')
+        logging.warning('Did not find a checkpoint file for given prefix and bucket. '
+                        'If this is the first execution for given parameters, the file will be created automatically')
 
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
