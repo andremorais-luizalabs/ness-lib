@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from airflow import DAG
 from airflow import models
@@ -8,9 +8,9 @@ from sness.utils.slack_utils import slack_failed_task
 
 dag_default_args = {
     'owner': 'Data Engineering',
-    'description': 'Deleta do Web UI as DAGs removidas do diretório de DAGSs do composer: '
+    'description': 'Deleta do Web UI as DAGs removidas do diretorio de DAGSs do composer: '
                    'Usar a variavel de ambinete "afDagID" para informar a DAG a ser deletada',
-    'start_date': datetime(2018, 9, 15),
+    'start_date': datetime.datetime(2018, 9, 15),
     'schedule_interval': None,
     'depends_on_past': False,
     'retries': 5,
@@ -66,4 +66,6 @@ DeleteDagOperator = MySqlOperator(
   sql="DELETE from dag where dag_id='{}'".format(models.Variable.get('afDagID')),
   dag=dag)
 
-DeleteXComOperator >> DeleteTaskOperator >> DeleteSLAMissOperator >> DeleteLogOperator >> DeleteJobOperator >> DeleteDagRunOperator >> DeleteDagOperator
+DeleteXComOperator >> DeleteTaskOperator >> DeleteSLAMissOperator
+DeleteSLAMissOperator >> DeleteLogOperator >> DeleteJobOperator
+DeleteJobOperator >> DeleteDagRunOperator >> DeleteDagOperator
