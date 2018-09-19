@@ -14,7 +14,6 @@ dag_default_args = {
     'owner': 'Dados Intelligence',
     'description': 'Move os arquivos do bucket Transient da Precifica para o bucket Raw transformando-os em parquet via pyspark.',
     'start_date': datetime.datetime(2018, 9, 15),
-    'schedule_interval': '10 * * * *',
     'depends_on_past': False,
     'retries': 5,
     'retry_delay': datetime.timedelta(seconds=10),
@@ -22,6 +21,7 @@ dag_default_args = {
 }
 
 dag = DAG('Precifica',
+          schedule_interval='10 * * * *',
           max_active_runs=1,
           default_args=dag_default_args,
           catchup=False
@@ -64,7 +64,7 @@ Price = DataProcPySparkOperator(
 # To Do: alterar o prefix (segundo parametro) concatenando a data variavel.
 # >>> 'price_new/partition_date='+datetime.now().strftime("%Y-%m-%d")
 SendPriceToBq = PythonOperator(
-    task_id='requirements',
+    task_id='send_to_big_query',
     python_callable=gs_to_bq.run_import,
     op_args=['prd-lake-raw-precifica', 'price_new/partition_date=2018-09-14/', 'pricing', 'precifica_price'],
     provide_context=False,
