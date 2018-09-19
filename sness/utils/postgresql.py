@@ -50,6 +50,7 @@ def run_query(connection, query):
         try:
             cur.execute(query)
             get_logger().debug('Query execute successfully')
+            cur.commit()
             success = True
             break
         except psycopg2.extensions.TransactionRollbackError as exc:
