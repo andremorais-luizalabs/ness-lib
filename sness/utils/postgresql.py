@@ -54,6 +54,7 @@ def run_query(connection, query):
             success = True
             break
         except psycopg2.extensions.TransactionRollbackError as exc:
+            connection.rollback()
             get_logger().exception(exc)
             get_logger().error(
                 'Unable to run query: %s \nAgainst the host <%s>, database <%s>, user <%s>',
