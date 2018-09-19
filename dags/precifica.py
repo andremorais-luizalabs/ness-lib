@@ -2,7 +2,7 @@ import datetime
 
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators.python_operator import PythonVirtualenvOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 
 from sness.utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
@@ -63,24 +63,13 @@ Price = DataProcPySparkOperator(
 
 # To Do: alterar o prefix (segundo parametro) concatenando a data variavel.
 # >>> 'price_new/partition_date='+datetime.now().strftime("%Y-%m-%d")
-def gs_to_bq_context():
-
-    gs_to_bq.run_import(
-        bucket='prd-lake-raw-precifica',
-        prefix='price_new/partition_date=2018-09-14',
-        dataset='pricing',
-        table='precifica_price'
-    )
-
-
-SendPriceToBq = PythonVirtualenvOperator(
-    task_id='send_price_to_big_query',
-    python_callable=gs_to_bq_context,
-    requirements=['google-api-python-client==1.7.4', 'google-api-core==1.3.0', 'google-cloud==0.34.0',
-                  'google-cloud-storage==1.11.0', 'google-cloud-bigquery==1.5.0', 'pandas==0.23.4',
-                  'scikit-learn==0.19.2', 'fire==0.1.3'],
-    python_version='2.7',
-    dag=dag)
+SendPriceToBq = PythonOperator(
+    task_id='requirements',
+    python_callable=gs_to_bq.run_import,
+    op_args=['prd-lake-raw-precifica', 'price_new/partition_date=2018-09-14/', 'pricing', 'precifica_price'],
+    provide_context=False,
+    dag=dag
+)
 
 DeleteCluster = DataprocClusterDelete(dag)
 
