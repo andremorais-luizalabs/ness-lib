@@ -19,6 +19,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO, stre
 
 
 def run_import(bucket, prefix, dataset, table):
+    prefix = normalize_prefix(prefix)
     all_blobs = list_blobs_with_prefix(bucket, prefix)
     logging.info('Found {} blobs in given path'.format(len(all_blobs)))
     processed_blobs = get_processed_blob_names(bucket, prefix)
@@ -33,6 +34,10 @@ def run_import(bucket, prefix, dataset, table):
     logging.info('Deleting temp file')
     os.remove(TEMP_PATH)
     logging.info('Arigatcho, agilizou!')
+
+
+def normalize_prefix(prefix):
+    return prefix if prefix[-1] == '/' else prefix + '/'
 
 
 def build_gs_uri(bucket, blob):
