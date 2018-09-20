@@ -72,7 +72,7 @@ def create_cluster(client, project, zone, region, cluster_name, number_nodes=10,
                     "JUPYTER_CONDA_PACKAGES": "numpy:pandas:scikit-learn"
                 }
             },
-            "configBucket": "prd-cluster-exploration",
+            "configBucket": "prd-cluster-config",
             'masterConfig': {
                 'numInstances': 1,
                 'machineTypeUri': 'n1-standard-{}'.format(str(cpu))
