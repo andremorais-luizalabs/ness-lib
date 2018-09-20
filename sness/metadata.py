@@ -1,6 +1,6 @@
 from datetime import datetime
 from .config.config import BUCKETS
-from .config.matedata import GET_METADATA, INSERT_METADATA
+from .config.metadata import GET_METADATA, INSERT_METADATA
 
 def save_metadata(df, zone, namespace, dataset, partition_column=None):
     columns = df.columns
