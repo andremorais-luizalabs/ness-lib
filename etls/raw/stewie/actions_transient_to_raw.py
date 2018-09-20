@@ -88,7 +88,7 @@ df = (
 # In[8]:
 
 
-final_df = df.selectExpr("action", "cast(action_timestamp/1000 as timestamp) as action_timestamp", "quantity", "product_id",                    "product_name", "price", "interaction_price", "category_id",                     "category_name", "department_id", "department_name",                     "brand_id", "brand_name", "review_score", "person_uuid",                    "person_id", "person_temp_id", "person_name", "email",                    "cpf", "city", "state", "village", "gender", "zip_code",                     "birth_date", "channel_id", "session_id", "identified_session",                     "user_name", "additional_info", "day_interacted_at")
+final_df = df.distinct().selectExpr("action", "cast(action_timestamp/1000 as timestamp) as action_timestamp", "quantity", "product_id",                    "product_name", "price", "interaction_price", "category_id",                     "category_name", "department_id", "department_name",                     "brand_id", "brand_name", "review_score", "person_uuid",                    "person_id", "person_temp_id", "person_name", "email",                    "cpf", "city", "state", "village", "gender", "zip_code",                     "birth_date", "channel_id", "session_id", "identified_session",                     "user_name", "additional_info", "day_interacted_at")
 
 
 # In[9]:
