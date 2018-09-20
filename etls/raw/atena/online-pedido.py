@@ -27,7 +27,7 @@ schema = json.loads('{"type":"struct","fields":[{"name":"clientid","type":"integ
 # In[24]:
 
 
-sdf = ss.readStream.option("delimiter", "|").option("header", "true").csv(TRANSIENT_BUCKET, schema=StructType.fromJson(schema))
+sdf = ss.readStream.option("delimiter", ";").option("header", "false").csv(TRANSIENT_BUCKET, schema=StructType.fromJson(schema))
 
 # In[25]:
 
