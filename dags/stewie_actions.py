@@ -18,8 +18,8 @@ dag_default_args = {
     'on_failure_callback': slack_utils.slack_failed_task
 }
 
-dag = DAG('Actions Pipeline',
-          schedule_interval='10 * * * *',
+dag = DAG('ActionsPipeline',
+          schedule_interval=None,
           max_active_runs=1,
           default_args=dag_default_args,
           catchup=False
