@@ -2,7 +2,7 @@ from datetime import datetime
 from .config.config import BUCKETS
 from .config.metadata import GET_METADATA, INSERT_METADATA
 
-def save_metadata(df, zone, namespace, dataset, partition_column=None):
+def save_metadata(df, zone, namespace, dataset, partition_columns=None):
     columns = df.columns
     last_update = datetime.now()
     file_format = "PARQUET"
@@ -12,6 +12,6 @@ def save_metadata(df, zone, namespace, dataset, partition_column=None):
                                    columns=columns, last_update=last_update,
                                    file_format=file_format, bucket=destination_bucket,
                                    source_path='', destination_path=destination_path,
-                                   partition_column=partition_column)
+                                   partition_columns=partition_columns)
 
     return query
