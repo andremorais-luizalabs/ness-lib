@@ -18,4 +18,10 @@ def save_metadata(df, zone, namespace, dataset, partition_columns=None):
                                    partition_columns=partition_columns)
     conn = connect(HOST, "sness-catalog", "postgres", FOO)
     run_query(conn, query)
-    
+
+
+def get_metadata():
+    query = GET_METADATA
+    conn = connect(HOST, "sness-catalog", "postgres", FOO)
+    cur = run_query(conn, query)
+    return cur.fetchall()
