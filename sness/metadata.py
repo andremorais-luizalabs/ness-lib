@@ -3,7 +3,7 @@ from .config.config import BUCKETS
 from .config.metadata import GET_METADATA, INSERT_METADATA
 
 def save_metadata(df, zone, namespace, dataset, partition_columns=None):
-    columns = df.columns
+    columns = dict(df.dtypes)
     last_update = datetime.now()
     file_format = "PARQUET"
     destination_bucket = BUCKETS.get(zone).get(namespace)
