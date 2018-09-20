@@ -4,6 +4,7 @@ PROJECT = "maga-bigdata"
 FOO = "xBC7vDcmvqD49qif"
 HOOK = 'xoxb-2151854096-434318528545-Hn9EvQw26siSLmFE23cfPWp7'
 DEFAULT_CLUSTER_NAME = "prd-cluster-jobs"
+HOST = "35.196.40.140"
 BUCKETS = {
         "transient":
             {

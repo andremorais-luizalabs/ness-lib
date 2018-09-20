@@ -1,6 +1,7 @@
 from datetime import datetime
-from .config.config import BUCKETS
+from .config.config import BUCKETS, FOO, HOST
 from .config.metadata import GET_METADATA, INSERT_METADATA
+from .utils.postgresql import connect, run_query
 import json
 
 def save_metadata(df, zone, namespace, dataset, partition_columns=None):
@@ -15,5 +16,6 @@ def save_metadata(df, zone, namespace, dataset, partition_columns=None):
                                    file_format=file_format, bucket=destination_bucket,
                                    source_path='', destination_path=destination_path,
                                    partition_columns=partition_columns)
-
-    return query
+    conn = connect(HOST, "sness-catalog", "postgres", FOO)
+    run_query(conn, query)
+    
