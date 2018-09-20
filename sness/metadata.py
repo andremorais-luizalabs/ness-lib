@@ -1,9 +1,10 @@
 from datetime import datetime
 from .config.config import BUCKETS
 from .config.metadata import GET_METADATA, INSERT_METADATA
+import json
 
 def save_metadata(df, zone, namespace, dataset, partition_columns=None):
-    columns = str(dict(df.dtypes))
+    columns = json.dumps(dict(df.dtypes))
     last_update = datetime.now()
     file_format = "PARQUET"
     destination_bucket = BUCKETS.get(zone).get(namespace)
