@@ -63,7 +63,7 @@ remove_accents_udf = udf(remove_accents)
 
 
 sdf = ss.readStream.option("delimiter", ";").option("header", True).csv(TRANSIENT_BUCKET, schema=schema)
-sdf.registerTempTable("sdf")
+sdf.createOrReplaceTempView("sdf")
 
 
 # In[119]:
@@ -76,8 +76,6 @@ sdf = spark.sql("select sku, reference, name, department, category, brand, tags,
 
 
 sdf = sdf.withColumn('last_compare_date', to_timestamp(col("string_date"), 'yyyy-MM-dd HH:mm')) .withColumn("partition_date", to_date(col("last_compare_date")))
-
-sdf = sdf.drop("string_date")
 
 
 # In[121]:
