@@ -63,13 +63,13 @@ remove_accents_udf = udf(remove_accents)
 
 
 sdf = ss.readStream.option("delimiter", ";").option("header", True).csv(TRANSIENT_BUCKET, schema=schema)
-sdf.createOrReplaceTempView("sdf")
+sdf.createOrReplaceTempView("price_table")
 
 
 # In[119]:
 
 
-sdf = spark.sql("select sku, reference, name, department, category, brand, tags, status, similar, store_name, seller, normal_price, discount_price, case when length(string_date) > 16 then substring(string_date,1,16) else string_date end as string_date from sdf where string_date is not null")
+sdf = ss.sql("select sku, reference, name, department, category, brand, tags, status, similar, store_name, seller, normal_price, discount_price, case when length(string_date) > 16 then substring(string_date,1,16) else string_date end as string_date from price_table where string_date is not null")
 
 
 # In[120]:
