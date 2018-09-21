@@ -19,7 +19,7 @@ dag_default_args = {
 }
 
 dag = DAG('ActionsPipeline',
-          schedule_interval=None,
+          schedule_interval='10 * * * *',
           max_active_runs=1,
           default_args=dag_default_args,
           catchup=False
