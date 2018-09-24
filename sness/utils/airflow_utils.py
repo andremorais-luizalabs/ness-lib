@@ -16,7 +16,6 @@ def DataprocClusterCreate(dag):
             master_machine_type=MASTER_MACHINE_TYPE,
             worker_machine_type=WORKER_MACHINE_TYPE,
             num_preemptible_workers=10,
-            graceful_decommission_timeout='1h',
             dag=dag)
 
 def DataprocClusterDelete(dag):
