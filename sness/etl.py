@@ -12,7 +12,7 @@ def dataframe2raw(dataframe, namespace, dataset, file_format='parquet', partitio
     :param partition_by: [List] List of columns to partition by
     '''
 
-    get_logger().info("Saving dataset: {} {} on Raw zone").format(namespace, dataset)
+    get_logger().info("Saving dataset: {} {} on Raw zone".format(namespace, dataset))
     _write_dataframe(dataframe, "raw", namespace, dataset, file_format, partition_by)
 
 
@@ -25,7 +25,7 @@ def dataframe2trusted(dataframe, namespace, dataset, file_format='parquet', part
         :param file_format: [str] Valid format (parquet, csv, json)
         :param partition_by: [List] List of columns to partition by
     '''
-    get_logger().info("Saving dataset: {} {} on Trusted zone").format(namespace, dataset)
+    get_logger().info("Saving dataset: {} {} on Trusted zone".format(namespace, dataset))
     _write_dataframe(dataframe, "trusted", namespace, dataset, file_format, partition_by)
 
 
@@ -38,7 +38,7 @@ def dataframe2refined(dataframe, namespace, dataset, file_format='parquet', part
         :param file_format: [str] Valid format (parquet, csv, json)
         :param partition_by: [List] List of columns to partition by
         '''
-    get_logger().info("Saving dataset: {} {} on Refined zone").format(namespace, dataset)
+    get_logger().info("Saving dataset: {} {} on Refined zone".format(namespace, dataset))
     _write_dataframe(dataframe, "refined", namespace, dataset, file_format, partition_by)
 
 
