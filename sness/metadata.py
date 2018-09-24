@@ -6,10 +6,14 @@ from .utils.log import get_logger
 import json
 
 
-def save_metadata(df, zone, namespace, dataset, file_format="parquet", partition_columns=None):
-    columns = json.dumps(dict(df.dtypes))
+def save_metadata(dataframe, zone, namespace, dataset, etl_mode, file_format="parquet", partition_columns=None):
+    """
+    This method saves the dataset metadata on postgresql
+    """
+
+    columns = json.dumps(dict(dataframe.dtypes))
     last_update = datetime.now()
-    destination_bucket, destination_path = get_destination_path(zone, namespace, dataset)
+    destination_bucket, destination_path = get_destination_path(zone, namespace, dataset, etl_mode)
     partition_columns = ','.join(partition_columns) if partition_columns else partition_columns
     query = INSERT_METADATA.format(zone=zone, namespace=namespace, dataset=dataset,
                                    columns=columns, last_update=last_update,
@@ -20,9 +24,15 @@ def save_metadata(df, zone, namespace, dataset, file_format="parquet", partition
     run_query(conn, query)
 
 
-def get_destination_path(zone, namespace, dataset):
+def get_destination_path(zone, namespace, dataset, etl_mode):
+    """
+    This method calculates where to save the dataset based on etl_mode
+    """
+
     now = datetime.now()
     destination_path = "{}/{}".format(dataset, now.strftime("%Y%m%d%H%M%S"))
+    if etl_mode in ("append", "ignore"):
+        destination_path = dataset+"/"
     try:
         destination_bucket = 'gs://'+BUCKETS.get(zone).get(namespace)+'/'
     except AttributeError as e:
