@@ -15,4 +15,3 @@ build: clean
 
 deploy: build
     gsutil -m cp -r sness/ gs://us-east1-ness-maestro-782d5135-bucket/dags/
-
