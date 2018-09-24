@@ -1,5 +1,6 @@
 from ..config.cluster import *
 from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 def DataprocClusterCreate(dag):
     return DataprocClusterCreateOperator(
@@ -24,5 +25,6 @@ def DataprocClusterDelete(dag):
         cluster_name=DEFAULT_CLUSTER_NAME,
         project_id=PROJECT,
         region=REGION,
-        dag=dag
+        dag=dag,
+        trigger_rule=TriggerRule.ALL_DONE
     )
