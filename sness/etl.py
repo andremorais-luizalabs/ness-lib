@@ -66,7 +66,7 @@ def _write_dataframe(dataframe,
     if not partition_by:
         partition_by = []
 
-    get_logger().info("Saving zone: {}\n namespace: {} \ndataset: {} \n, etl_mode: {}\n "
+    get_logger().info("Saving dataframe \nzone: {}\n namespace: {} \ndataset: {} \n etl_mode: {}\n "
                       "file_format: {}".format(zone, namespace, dataset, etl_mode, file_format))
     get_logger().info('destination: %s', destination_path)
 
