@@ -62,7 +62,7 @@ def _write_dataframe(dataframe,
     :return:
     """
 
-    destination_path = "".join(get_destination_path(zone, namespace, dataset))
+    destination_path = "".join(get_destination_path(zone, namespace, dataset, etl_mode))
     if not partition_by:
         partition_by = []
 
