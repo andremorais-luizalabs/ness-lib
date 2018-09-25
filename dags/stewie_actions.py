@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
-from sness.utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
+from sness.airflow.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 from sness.utils import slack_utils, date_utils
 from sness.config import config
 from sness.gcloud import gs_to_bq
@@ -42,7 +42,8 @@ TransientToRaw = DataProcPySparkOperator(
 RawToBigQuery = PythonOperator(
     task_id='send_to_big_query',
     python_callable=gs_to_bq.run_import,
-    op_args=['prd-lake-raw-stewie', date_utils.build_today_partition('actions/day_interacted_at='), 'stewie', 'actions'],
+    op_args=['prd-lake-raw-stewie', date_utils.build_today_partition('actions/day_interacted_at='), 'stewie',
+             'actions'],
     provide_context=False,
     dag=dag
 )

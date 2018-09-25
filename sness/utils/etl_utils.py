@@ -1,5 +1,7 @@
 from unicodedata import normalize, category
 from pyspark.sql.functions import *
+
+
 def remove_accents(str_input):
     """
     Remove accents of the string

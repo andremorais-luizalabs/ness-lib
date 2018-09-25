@@ -1,7 +1,7 @@
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from airflow.utils.trigger_rule import TriggerRule
-from ..config.cluster import DEFAULT_CLUSTER
+from sness.config.cluster import DEFAULT_CLUSTER
 
 class NessDataprocClusterCreateOperator(BaseOperator):
     """

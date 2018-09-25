@@ -1,4 +1,4 @@
-from ..config.cluster import *
+from sness.config.cluster import *
 from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator
 from airflow.utils.trigger_rule import TriggerRule
 

@@ -5,7 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 
-from sness.utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
+from sness.airflow.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 from sness.utils.slack_utils import slack_failed_task
 from sness.config.config import DEFAULT_CLUSTER_NAME
 from sness.gcloud import gs_to_bq
@@ -60,9 +60,9 @@ Price = DataProcPySparkOperator(
     region='us-east1-b',
     dag=dag)
 
+#todo: alterar o prefix (segundo parametro) concatenando a data variavel
+#-> 'price_new/partition_date='+datetime.now().strftime("%Y-%m-%d")
 
-# To Do: alterar o prefix (segundo parametro) concatenando a data variavel.
-# >>> 'price_new/partition_date='+datetime.now().strftime("%Y-%m-%d")
 SendPriceToBq = PythonOperator(
     task_id='send_to_big_query',
     python_callable=gs_to_bq.run_import,

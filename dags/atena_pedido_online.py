@@ -4,7 +4,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from sness.utils.slack_utils import slack_failed_task
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 from sness.config.config import DEFAULT_CLUSTER_NAME
-from sness.utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
+from sness.airflow.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 
 default_args = {
     'owner': 'Data Engineering',
