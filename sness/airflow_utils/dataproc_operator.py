@@ -56,8 +56,8 @@ class NessDataprocClusterCreateOperator(BaseOperator):
     :type internal_ip_only: bool
     :param tags: The GCE tags to add to all instances
     :type tags: list[string]
-    :param gcp_conn_id: The connection ID to use connecting to Google Cloud Platform.
-    :type gcp_conn_id: str
+    :param google_cloud_conn_id: The connection ID to use connecting to Google Cloud Platform.
+    :type google_cloud_conn_id: str
     :param delegate_to: The account to impersonate, if any.
         For this to work, the service account making the request must have domain-wide
         delegation enabled.
@@ -97,7 +97,7 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                  worker_disk_size=DEFAULT_CLUSTER.get('worker_disk_size'),
                  num_preemptible_workers=DEFAULT_CLUSTER.get('num_preemptible_workers'),
                  labels=None,
-                 gcp_conn_id='google_cloud_default',
+                 google_cloud_conn_id='google_cloud_default',
                  delegate_to=None,
                  service_account=None,
                  service_account_scopes=None,
@@ -106,7 +106,7 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                  auto_delete_ttl=None,
                  *args,**kwargs):
         super(NessDataprocClusterCreateOperator, self).__init__(*args, **kwargs)
-        self.gcp_conn_id = gcp_conn_id
+        self.google_cloud_conn_id = google_cloud_conn_id
         self.delegate_to = delegate_to
         self.cluster_name = _infer_cluster_name(self.dag)
         self.project_id = DEFAULT_CLUSTER.get('project')
@@ -146,8 +146,8 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
     """
     Delete a cluster on Google Cloud Dataproc. The operator will wait until the
     cluster is destroyed.
-    :param gcp_conn_id: The connection ID to use connecting to Google Cloud Platform.
-    :type gcp_conn_id: str
+    :param google_cloud_conn_id: The connection ID to use connecting to Google Cloud Platform.
+    :type google_cloud_conn_id: str
     :param delegate_to: The account to impersonate, if any.
         For this to work, the service account making the request must have domain-wide
         delegation enabled.
@@ -158,13 +158,13 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self,
-                 gcp_conn_id='google_cloud_default',
+                 google_cloud_conn_id='google_cloud_default',
                  delegate_to=None,
                  trigger_rule=TriggerRule.ALL_DONE,
                  *args,
                  **kwargs):
         super(NessDataprocClusterDeleteOperator, self).__init__(*args, **kwargs)
-        self.gcp_conn_id = gcp_conn_id
+        self.google_cloud_conn_id = google_cloud_conn_id
         self.delegate_to = delegate_to
         self.cluster_name = _infer_cluster_name(self.dag)
         self.project_id = DEFAULT_CLUSTER.get('project')
