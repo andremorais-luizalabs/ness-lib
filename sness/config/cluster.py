@@ -36,12 +36,7 @@ DEFAULT_CLUSTER = {
         "JUPYTER_CONDA_PACKAGES": "numpy:pandas:scikit-learn"
     },
     'properties': {
-        "spark:spark.debug.maxToStringFields": "250",
-        "spark:spark.driver.cores": "5",
-        "spark:spark.executorEnv.PYTHONHASHSEED": "0",
-        "spark:spark.yarn.am.memory": "2048m",
-        "spark:spark.yarn.driver.memoryOverhead": "2048",
-        "spark:spark.yarn.executor.memoryOverhead": "2048"
+        PROPERTIES
     },
     'storage_bucket':'prd-lake-dataproc-metainfo'
 }

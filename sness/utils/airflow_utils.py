@@ -11,7 +11,7 @@ def DataprocClusterCreate(dag):
         storage_bucket=DEFAULT_CLUSTER_NAME,
         zone=ZONE,
         region=REGION,
-        num_workers=10,
+        num_workers=12,
         init_actions_uris=ACTION_SCRIPTS,
         metadata=METADATA,
         properties=PROPERTIES,
