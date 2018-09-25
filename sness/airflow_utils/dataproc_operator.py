@@ -140,7 +140,24 @@ class NessDataprocClusterCreateOperator(BaseOperator):
         self.init_args = kwargs
 
     def execute(self, context):
-        DataprocClusterCreateOperator(**self.init_args)
+        DataprocClusterCreateOperator(cluster_name=self.cluster_name,
+                                      project_id=self.project_id,
+                                      num_workers=self.num_workers,
+                                      zone=self.zone,
+                                      storage_bucket=self.storage_bucket,
+                                      init_actions_uris=self.init_actions_uris,
+                                      metadata=self.metadata,
+                                      properties=self.properties,
+                                      master_machine_type=self.master_machine_type,
+                                      master_disk_size=self.master_disk_size,
+                                      worker_machine_type=self.worker_machine_type,
+                                      worker_disk_size=self.worker_disk_size,
+                                      num_preemptible_workers=self.num_preemptible_workers,
+                                      labels=self.labels,
+                                      region=self.region,
+                                      google_cloud_conn_id=self.google_cloud_conn_id,
+                                      delegate_to=self.delegate_to,
+                                      **self.init_args)
 
 class NessDataprocClusterDeleteOperator(BaseOperator):
     """
@@ -172,7 +189,12 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
         self.init_args = kwargs
 
     def execute(self, context):
-        DataprocClusterDeleteOperator(**self.init_args)
+        DataprocClusterDeleteOperator(cluster_name=self.cluster_name,
+                                      project_id=self.project_id,
+                                      region=self.region,
+                                      google_cloud_conn_id=self.google_cloud_conn_id,
+                                      delegate_to=self.delegate_to,
+                                      **self.init_args)
 
 def _infer_cluster_name(dag):
     return dag.owner.lower() + dag.dag_id.lower() + '-' + '-cluster'
