@@ -13,7 +13,7 @@ def slack_failed_task(context):
         task_id='slack_failed',
         channel="#data-engineer-datena",
         token=HOOK,
-        icon_url='https://abrilveja.files.wordpress.com/2018/04/jose-luiz-datena-20150723-001.jpg',
+        icon_url='https://ct.yimg.com/cy/4636/38237757120_ac2a9c_128sq.jpg',
         text=
         '''
         :red_circle: Failure on: {dag} \n
