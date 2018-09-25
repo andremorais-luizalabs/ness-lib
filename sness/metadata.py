@@ -32,9 +32,9 @@ def get_destination_path(zone, namespace, dataset, etl_mode):
     now = datetime.now()
     destination_path = "{}/{}".format(dataset, now.strftime("%Y%m%d%H%M%S"))
     if etl_mode in ("append", "ignore"):
-        destination_path = dataset+"/"
+        destination_path = dataset + "/"
     try:
-        destination_bucket = 'gs://'+BUCKETS.get(zone).get(namespace)+'/'
+        destination_bucket = 'gs://' + BUCKETS.get(zone).get(namespace) + '/'
     except AttributeError as e:
         get_logger().info("Unknow zone or namespace, please visit config to check")
 

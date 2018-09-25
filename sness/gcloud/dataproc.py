@@ -17,6 +17,7 @@ def get_client():
     dataproc = googleapiclient.discovery.build('dataproc', 'v1')
     return dataproc
 
+
 # [END get_client]
 
 
@@ -246,9 +247,6 @@ def main(project_id, zone, cluster_name, bucket_name,
                 dataproc, project_id, zone, region, cluster_name)
             wait_for_cluster_creation(
                 dataproc, project_id, region, cluster_name)
-
-        upload_pyspark_file(
-            project_id, bucket_name, spark_filename, spark_file)
 
         cluster_list = list_clusters_with_details(
             dataproc, project_id, region)['clusters']
