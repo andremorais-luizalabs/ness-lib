@@ -15,6 +15,7 @@ def dataframe2raw(dataframe, namespace, dataset, file_format='parquet', partitio
 
     _write_dataframe(dataframe, "raw", namespace, dataset, mode, file_format, partition_by)
 
+
 def dataframe2trusted(dataframe, namespace, dataset, file_format='parquet', partition_by=None, mode='overwrite'):
     """
         Save spark dataframe to trusted zone
@@ -29,7 +30,7 @@ def dataframe2trusted(dataframe, namespace, dataset, file_format='parquet', part
     _write_dataframe(dataframe, "trusted", namespace, dataset, mode, file_format, partition_by)
 
 
-def dataframe2refined(dataframe, namespace, dataset, file_format='parquet', partition_by=None):
+def dataframe2refined(dataframe, namespace, dataset, file_format='parquet', partition_by=None, mode='overwrite'):
     """
         Save spark dataframe to refined zone
         :param dataframe: Spark Dataframe
@@ -74,7 +75,7 @@ def _write_dataframe(dataframe,
         .write \
         .mode(etl_mode) \
         .partitionBy(partition_by) \
-        .format(file_format)\
+        .format(file_format) \
         .save(destination_path)
 
     save_metadata(dataframe, zone, namespace, dataset, etl_mode, file_format, partition_by)

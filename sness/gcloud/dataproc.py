@@ -17,6 +17,7 @@ def get_client():
     dataproc = googleapiclient.discovery.build('dataproc', 'v1')
     return dataproc
 
+
 # [END get_client]
 
 
