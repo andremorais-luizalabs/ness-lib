@@ -104,7 +104,6 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                  idle_delete_ttl=None,
                  auto_delete_time=None,
                  auto_delete_ttl=None,
-                 dag=None,
                  *args, **kwargs):
         super(NessDataprocClusterCreateOperator, self).__init__(*args, **kwargs)
         self.google_cloud_conn_id = google_cloud_conn_id
@@ -138,7 +137,6 @@ class NessDataprocClusterCreateOperator(BaseOperator):
         self.idle_delete_ttl = idle_delete_ttl
         self.auto_delete_time = auto_delete_time
         self.auto_delete_ttl = auto_delete_ttl
-        self.dag = dag
         self.init_args = kwargs
 
     def execute(self, context):
@@ -181,7 +179,6 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
                  google_cloud_conn_id='google_cloud_default',
                  delegate_to=None,
                  trigger_rule=TriggerRule.ALL_DONE,
-                 dag=None,
                  *args,
                  **kwargs):
         super(NessDataprocClusterDeleteOperator, self).__init__(*args, **kwargs)
@@ -190,7 +187,6 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
         self.cluster_name = _infer_cluster_name(self.dag.owner, self.dag.dag_id)
         self.project_id = DEFAULT_CLUSTER.get('project')
         self.region = DEFAULT_CLUSTER.get('region')
-        self.dag = dag
         self.init_args = kwargs
 
     def execute(self, context):
