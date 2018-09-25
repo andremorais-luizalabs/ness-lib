@@ -21,7 +21,7 @@ inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
 
 # CreateCluster = DataprocClusterCreate(dag)
-CreateCluster = NessDataprocClusterCreateOperator(num_workers=12, dag=dag)
+CreateCluster = NessDataprocClusterCreateOperator(task_id="create_cluster", num_workers=12, dag=dag)
 
 OnlineCustomer = DataProcPySparkOperator(
     task_id='atena_online_customer',
@@ -54,7 +54,7 @@ SingleCustomer = DataProcPySparkOperator(
     dag=dag)
 
 # DeleteCluster = DataprocClusterDelete(dag)
-DeleteCluster = NessDataprocClusterDeleteOperator(dag=dag)
+DeleteCluster = NessDataprocClusterDeleteOperator(task_id="delete_cluster", dag=dag)
 
 inicio.set_downstream(CreateCluster)
 CreateCluster.set_downstream([OnlineCustomer, GemcoCustomer])
