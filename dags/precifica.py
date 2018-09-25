@@ -5,7 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 
-from sness.airflow.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
+from sness.airflow_utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 from sness.utils.slack_utils import slack_failed_task
 from sness.config.config import DEFAULT_CLUSTER_NAME
 from sness.gcloud import gs_to_bq

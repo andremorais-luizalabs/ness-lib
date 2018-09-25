@@ -14,7 +14,7 @@ python pispark.py --bucket prd-lake-raw-stewie
 --table actions_raw
 '''
 CHECKPOINT_FOLDER_PREFIX = '_gsbq_metadata/'
-TEMP_PATH = '/home/airflow/gcs/data/processed_blobs.txt'
+TEMP_PATH = '/home/airflow_utils/gcs/data/processed_blobs.txt'
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO, stream=sys.stdout)
 
 
