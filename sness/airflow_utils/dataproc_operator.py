@@ -157,7 +157,6 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                                       region=self.region,
                                       google_cloud_conn_id=self.google_cloud_conn_id,
                                       delegate_to=self.delegate_to,
-                                      dag=self.dag,
                                       **self.init_args)
 
 class NessDataprocClusterDeleteOperator(BaseOperator):
@@ -195,8 +194,6 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
                                       region=self.region,
                                       google_cloud_conn_id=self.google_cloud_conn_id,
                                       delegate_to=self.delegate_to,
-                                      dag=self.dag,
-                                      trigger_rule=self.trigger_rule,
                                       **self.init_args)
 
 def _infer_cluster_name(owner, dag_id):
