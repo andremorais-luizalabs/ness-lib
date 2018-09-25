@@ -197,4 +197,4 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
                                       **self.init_args)
 
 def _infer_cluster_name(dag):
-    return dag.owner.lower() + dag.dag_id.lower() + '-' + '-cluster'
+    return dag.owner.replace(' ','-').lower() + '-' + dag.dag_id.lower() + '-cluster'
