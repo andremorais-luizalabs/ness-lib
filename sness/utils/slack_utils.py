@@ -4,7 +4,7 @@ from airflow.operators.slack_operator import SlackAPIPostOperator
 
 
 def slack_failed_task(context):
-    link = '<{base_url}/admin/airflow/log?dag_id={dag_id}&task_id={task_id}&execution_date={execution_date}|logs>'.format(
+    link = '<{base_url}/admin/airflow_utils/log?dag_id={dag_id}&task_id={task_id}&execution_date={execution_date}|logs>'.format(
         base_url=configuration.get('webserver', 'BASE_URL'),
         dag_id=context['dag'].dag_id,
         task_id=context['task_instance'].task_id,
