@@ -104,11 +104,12 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                  idle_delete_ttl=None,
                  auto_delete_time=None,
                  auto_delete_ttl=None,
-                 *args,**kwargs):
+                 dag=None,
+                 *args, **kwargs):
         super(NessDataprocClusterCreateOperator, self).__init__(*args, **kwargs)
         self.google_cloud_conn_id = google_cloud_conn_id
         self.delegate_to = delegate_to
-        self.cluster_name = _infer_cluster_name(self.dag)
+        self.cluster_name = _infer_cluster_name(self.dag.owner, self.dag.dag_id)
         self.project_id = DEFAULT_CLUSTER.get('project')
         self.num_workers = num_workers
         self.num_preemptible_workers = num_preemptible_workers
@@ -137,6 +138,7 @@ class NessDataprocClusterCreateOperator(BaseOperator):
         self.idle_delete_ttl = idle_delete_ttl
         self.auto_delete_time = auto_delete_time
         self.auto_delete_ttl = auto_delete_ttl
+        self.dag = dag
         self.init_args = kwargs
 
     def execute(self, context):
@@ -157,6 +159,7 @@ class NessDataprocClusterCreateOperator(BaseOperator):
                                       region=self.region,
                                       google_cloud_conn_id=self.google_cloud_conn_id,
                                       delegate_to=self.delegate_to,
+                                      dag=self.dag,
                                       **self.init_args)
 
 class NessDataprocClusterDeleteOperator(BaseOperator):
@@ -178,14 +181,16 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
                  google_cloud_conn_id='google_cloud_default',
                  delegate_to=None,
                  trigger_rule=TriggerRule.ALL_DONE,
+                 dag=None,
                  *args,
                  **kwargs):
         super(NessDataprocClusterDeleteOperator, self).__init__(*args, **kwargs)
         self.google_cloud_conn_id = google_cloud_conn_id
         self.delegate_to = delegate_to
-        self.cluster_name = _infer_cluster_name(self.dag)
+        self.cluster_name = _infer_cluster_name(self.dag.owner, self.dag.dag_id)
         self.project_id = DEFAULT_CLUSTER.get('project')
         self.region = DEFAULT_CLUSTER.get('region')
+        self.dag = dag
         self.init_args = kwargs
 
     def execute(self, context):
@@ -194,7 +199,9 @@ class NessDataprocClusterDeleteOperator(BaseOperator):
                                       region=self.region,
                                       google_cloud_conn_id=self.google_cloud_conn_id,
                                       delegate_to=self.delegate_to,
+                                      dag=self.dag,
+                                      trigger_rule=self.trigger_rule,
                                       **self.init_args)
 
-def _infer_cluster_name(dag):
-    return dag.owner.replace(' ','-').lower() + '-' + dag.dag_id.lower() + '-cluster'
+def _infer_cluster_name(owner, dag_id):
+    return owner.replace(' ','-').lower() + '-' + dag_id.lower() + '-cluster'
