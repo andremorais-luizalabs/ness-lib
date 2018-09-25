@@ -13,8 +13,17 @@ def slack_failed_task(context):
         task_id='slack_failed',
         channel="#data-engineer-datena",
         token=HOOK,
-        text=':red_circle: Failure on: ' + str(context['dag']) + '\nRun ID: ' \
-             + str(context['run_id']) + '\nTask: ' + str(context['task_instance']) \
-             + str(context['run_id']) + '\nTask: ' + str(context['task_instance']) \
-             + '\nSee ' + link + ' to debug')
+        icon_url='https://ct.yimg.com/cy/4636/38237757120_ac2a9c_128sq.jpg',
+        text=
+        '''
+        :red_circle: Failure on: {dag} \n
+        RunID: {run_id} \n
+        Task: {task_instance} \n
+        See {link} to debug
+        '''.format(
+                    dag=str(context['dag']),
+                    run_id=str(context['run_id']),
+                    task_instance=str(context['task_instance']),
+                    link=link)
+)
     return failed_alert.execute(context=context)
