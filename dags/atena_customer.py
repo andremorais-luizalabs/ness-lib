@@ -20,8 +20,12 @@ dag = DAG('AtenaSingleCustomer', default_args=default_args, schedule_interval='0
 inicio = DummyOperator(task_id='Inicio', dag=dag)
 fim = DummyOperator(task_id='Fim', dag=dag)
 
-# CreateCluster = DataprocClusterCreate(dag)
-CreateCluster = NessDataprocClusterCreateOperator(task_id="create_cluster", num_workers=12, dag=dag)
+default_account = 'data-engineering@maga-bigdata.iam.gserviceaccount.com'
+
+CreateCluster = NessDataprocClusterCreateOperator(task_id="create_cluster",
+                                                  num_workers=12,
+                                                  delegate_to=default_account,
+                                                  dag=dag)
 
 OnlineCustomer = DataProcPySparkOperator(
     task_id='atena_online_customer',
@@ -29,8 +33,7 @@ OnlineCustomer = DataProcPySparkOperator(
     job_name='AtenaOnlineCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
-    delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
-    region='us-east1-b',
+    delegate_to=default_account,
     dag=dag)
 
 GemcoCustomer = DataProcPySparkOperator(
@@ -39,8 +42,7 @@ GemcoCustomer = DataProcPySparkOperator(
     job_name='AtenaGemcoCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
-    delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
-    region='us-east1-b',
+    delegate_to=default_account,
     dag=dag)
 
 SingleCustomer = DataProcPySparkOperator(
@@ -49,12 +51,12 @@ SingleCustomer = DataProcPySparkOperator(
     job_name='AtenaSingleCustomer',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
-    delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
-    region='us-east1-b',
+    delegate_to=default_account,
     dag=dag)
 
 # DeleteCluster = DataprocClusterDelete(dag)
-DeleteCluster = NessDataprocClusterDeleteOperator(task_id="delete_cluster", dag=dag)
+DeleteCluster = NessDataprocClusterDeleteOperator(task_id="delete_cluster",
+                                                  delegate_to=default_account, dag=dag)
 
 inicio.set_downstream(CreateCluster)
 CreateCluster.set_downstream([OnlineCustomer, GemcoCustomer])
