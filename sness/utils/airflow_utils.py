@@ -9,13 +9,13 @@ def DataprocClusterCreate(dag):
             storage_bucket=DEFAULT_CLUSTER_NAME,
             zone=ZONE,
             region=REGION,
-            num_workers=2,
+            num_workers=10,
             init_actions_uris=ACTION_SCRIPTS,
             metadata=METADATA,
             properties=PROPERTIES,
             master_machine_type=MASTER_MACHINE_TYPE,
             worker_machine_type=WORKER_MACHINE_TYPE,
-            num_preemptible_workers=10,
+            num_preemptible_workers=0,
             dag=dag)
 
 def DataprocClusterDelete(dag):
