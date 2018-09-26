@@ -7,7 +7,7 @@ def DataprocClusterCreate(dag, num_workers=12, num_preemptible=0):
     return DataprocClusterCreateOperator(
         task_id='create_dataproc_cluster',
         project_id=PROJECT,
-        cluster_name=_infer_cluster_name(dag),
+        cluster_name=dag.dag_id,
         storage_bucket=DEFAULT_CLUSTER_NAME,
         zone=ZONE,
         region=REGION,
@@ -24,13 +24,9 @@ def DataprocClusterCreate(dag, num_workers=12, num_preemptible=0):
 def DataprocClusterDelete(dag):
     return DataprocClusterDeleteOperator(
         task_id='delete_dataproc_cluster',
-        cluster_name=_infer_cluster_name(dag),
+        cluster_name=dag.dag_id,
         project_id=PROJECT,
         region=REGION,
         dag=dag,
         trigger_rule=TriggerRule.ALL_DONE
     )
-
-
-def _infer_cluster_name(dag):
-    return dag.owner.lower() + dag.dag_id.lower() + '-' + '-cluster'
