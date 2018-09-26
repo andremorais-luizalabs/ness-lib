@@ -102,6 +102,7 @@ def NessDataprocClusterCreate(
 
     return DataprocClusterCreateOperator(
         task_id='DataprocClusterCreate',
+        dag=dag,
         cluster_name=_infer_cluster_name(dag.owner, dag.dag_id),
         project_id=DEFAULT_CLUSTER.get('project'),
         num_workers=num_workers,
@@ -137,6 +138,7 @@ def NessDataprocClusterDelete(
     delegate_to=None):
         return DataprocClusterDeleteOperator(
             task_id='DataprocClusterDelete',
+            dag=dag,
             cluster_name=_infer_cluster_name(dag.owner, dag.dag_id),
             project_id = DEFAULT_CLUSTER.get('project'),
             region = DEFAULT_CLUSTER.get('region'),
