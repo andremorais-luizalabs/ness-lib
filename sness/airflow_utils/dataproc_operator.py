@@ -75,6 +75,7 @@ parameters detailed in the link are available as a parameter to this operator.
 :type auto_delete_ttl: int
 """
 def NessDataprocClusterCreate(
+    dag,
     num_workers=DEFAULT_CLUSTER.get('num_workers'),
     network_uri=None,
     subnetwork_uri=None,
@@ -97,12 +98,11 @@ def NessDataprocClusterCreate(
     service_account_scopes=None,
     idle_delete_ttl=None,
     auto_delete_time=None,
-    auto_delete_ttl=None,
-    **kwargs):
+    auto_delete_ttl=None):
 
     return DataprocClusterCreateOperator(
         task_id='DataprocClusterCreate',
-        cluster_name=_infer_cluster_name(kwargs['dag'].owner, kwargs['dag'].dag_id),
+        cluster_name=_infer_cluster_name(dag.owner, dag.dag_id),
         project_id=DEFAULT_CLUSTER.get('project'),
         num_workers=num_workers,
         zone = DEFAULT_CLUSTER.get('zone'),
@@ -118,8 +118,7 @@ def NessDataprocClusterCreate(
         labels=labels,
         region = DEFAULT_CLUSTER.get('region'),
         google_cloud_conn_id=google_cloud_conn_id,
-        delegate_to=delegate_to,
-        **kwargs)
+        delegate_to=delegate_to)
 
 
 """
@@ -133,19 +132,17 @@ cluster is destroyed.
 :type delegate_to: str
 """
 def NessDataprocClusterDelete(
+    dag,
     google_cloud_conn_id='google_cloud_default',
-    delegate_to=None,
-    *args,
-    **kwargs):
+    delegate_to=None):
         return DataprocClusterDeleteOperator(
             task_id='DataprocClusterDelete',
-            cluster_name=_infer_cluster_name(kwargs['dag'].owner, kwargs['dag'].dag_id),
+            cluster_name=_infer_cluster_name(dag.owner, dag.dag_id),
             project_id = DEFAULT_CLUSTER.get('project'),
             region = DEFAULT_CLUSTER.get('region'),
             google_cloud_conn_id=google_cloud_conn_id,
             delegate_to=delegate_to,
-            trigger_rule=TriggerRule.ALL_DONE,
-            **kwargs)
+            trigger_rule=TriggerRule.ALL_DONE)
 
 
 def _infer_cluster_name(owner, dag_id):

@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
-from sness.airflow_utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
+from sness.airflow_utils.dataproc_operator import NessDataprocClusterCreate, NessDataprocClusterDelete
 from sness.utils import slack_utils, date_utils
 from sness.config import config
 from sness.gcloud import gs_to_bq
@@ -27,7 +27,7 @@ dag = DAG('ActionsPipeline',
 
 StartDummy = DummyOperator(task_id='Start', dag=dag)
 
-CreateCluster = DataprocClusterCreate(dag)
+CreateCluster = NessDataprocClusterCreate(dag)
 
 TransientToRaw = DataProcPySparkOperator(
     task_id='actions_transient_to_raw',
@@ -48,7 +48,7 @@ RawToBigQuery = PythonOperator(
     dag=dag
 )
 
-DeleteCluster = DataprocClusterDelete(dag)
+DeleteCluster = NessDataprocClusterDelete(dag)
 
 EndDummy = DummyOperator(task_id='End', dag=dag)
 
