@@ -5,8 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 from sness.config.config import DEFAULT_CLUSTER_NAME
 from sness.utils.slack_utils import slack_failed_task
-from sness.airflow.dataproc_operator import NessDataprocClusterCreateOperator
-from sness.airflow.dataproc_operator import NessDataprocClusterDeleteOperator
+from sness.airflow_utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 
 
 # Default Arguments
@@ -31,8 +30,7 @@ start = DummyOperator(task_id='Start', dag=dag)
 end = DummyOperator(task_id='End', dag=dag)
 
 # Create a Dataproc Cluster
-CreateCluster = NessDataprocClusterCreateOperator(
-    task_id="create_cluster", num_workers=10, dag=dag)
+CreateCluster = DataprocClusterCreate(dag=dag)
 
 
 # Step of the Products Importer
@@ -71,8 +69,7 @@ PurchaseProfile = DataProcPySparkOperator(
 
 
 # Delete the Dataproc Cluster
-DeleteCluster = NessDataprocClusterDeleteOperator(
-    task_id="delete_cluster", dag=dag)
+DeleteCluster = DataprocClusterDelete(dag=dag)
 
 # Pipeline definition
 start >> CreateCluster >> ErpProductImporter >> ErpOrderImporter

@@ -337,6 +337,8 @@ final = grouped.join(zipc, cond, "left_outer").drop("cep", "etl_id").withColumn(
     .withColumn("alter_date", date_format("dtaltcad", "yyyy-MM-dd")) \
     .withColumn("etl_id", lit(date.today()))
 
+
+
 # In[12]:
-dataframe2trusted(final, "atena", "single_customer", partition_by=["alter_date"])
+dataframe2trusted(final, namespace="atena", dataset="single_customer", partition_by=["alter_date"])
 # final.repartition("alter_date").write.mode("overwrite").parquet("gs://prd-lake-trusted-atena/single_customer/")

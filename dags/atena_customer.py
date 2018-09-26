@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from sness.utils.slack_utils import slack_failed_task
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
-# from sness.airflow_utils.dataproc_operator import NessDataprocClusterCreateOperator, NessDataprocClusterDeleteOperator
+# from sness.airflow_utils.dataproc_operator import NessDataprocClusterCreate, NessDataprocClusterDelete
 from sness.airflow_utils.airflow_utils import DataprocClusterCreate, DataprocClusterDelete
 
 default_args = {
@@ -24,10 +24,9 @@ default_account = 'data-engineering@maga-bigdata.iam.gserviceaccount.com'
 
 CreateCluster = DataprocClusterCreate(dag=dag)
 
-# CreateCluster = NessDataprocClusterCreateOperator(task_id="create_cluster",
-#                                                   num_workers=12,
-#                                                   delegate_to=default_account,
-#                                                   dag=dag)
+# CreateCluster = NessDataprocClusterCreate(num_workers=11,
+#                                           delegate_to=default_account,
+#                                           dag=dag)
 
 OnlineCustomer = DataProcPySparkOperator(
     task_id='atena_online_customer',
@@ -57,8 +56,7 @@ SingleCustomer = DataProcPySparkOperator(
     dag=dag)
 
 DeleteCluster = DataprocClusterDelete(dag)
-# DeleteCluster = NessDataprocClusterDeleteOperator(task_id="delete_cluster",
-#                                                   delegate_to=default_account, dag=dag)
+# DeleteCluster = NessDataprocClusterDelete(delegate_to=default_account, dag=dag)
 
 inicio.set_downstream(CreateCluster)
 CreateCluster.set_downstream([OnlineCustomer, GemcoCustomer])
