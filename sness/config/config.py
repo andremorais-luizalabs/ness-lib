@@ -1,5 +1,5 @@
 REGION = "global"
-ZONE = "us-east1-b"
+ZONE = "us-east1-c"
 PROJECT = "maga-bigdata"
 FOO = "xBC7vDcmvqD49qif"
 HOOK = 'xoxb-2151854096-434318528545-Hn9EvQw26siSLmFE23cfPWp7'
