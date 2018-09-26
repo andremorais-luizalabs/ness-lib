@@ -7,7 +7,7 @@ def DataprocClusterCreate(dag, num_workers=12, num_preemptible=0):
     return DataprocClusterCreateOperator(
         task_id='create_dataproc_cluster',
         project_id=PROJECT,
-        cluster_name=dag.dag_id.lower()"-cluster",
+        cluster_name=dag.dag_id.lower()+"-cluster",
         storage_bucket=DEFAULT_CLUSTER_NAME,
         zone=ZONE,
         region=REGION,
