@@ -144,7 +144,7 @@ def NessDataprocClusterDelete(
             region = DEFAULT_CLUSTER.get('region'),
             google_cloud_conn_id=google_cloud_conn_id,
             delegate_to=delegate_to,
-            trigger_rule=TriggerRule.ALL_DONE
+            trigger_rule=TriggerRule.ALL_DONE,
             **kwargs)
 
 
