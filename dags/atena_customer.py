@@ -22,11 +22,11 @@ fim = DummyOperator(task_id='Fim', dag=dag)
 
 default_account = 'data-engineering@maga-bigdata.iam.gserviceaccount.com'
 
-# CreateCluster = DataprocClusterCreate(dag=dag)
+CreateCluster = DataprocClusterCreate(dag=dag)
 
-CreateCluster = NessDataprocClusterCreate(num_workers=11,
-                                          delegate_to=default_account,
-                                          dag=dag)
+# CreateCluster = NessDataprocClusterCreate(num_workers=11,
+#                                           delegate_to=default_account,
+#                                           dag=dag)
 
 OnlineCustomer = DataProcPySparkOperator(
     task_id='atena_online_customer',
@@ -55,8 +55,8 @@ SingleCustomer = DataProcPySparkOperator(
     delegate_to=default_account,
     dag=dag)
 
-# DeleteCluster = DataprocClusterDelete(dag)
-DeleteCluster = NessDataprocClusterDelete(delegate_to=default_account, dag=dag)
+DeleteCluster = DataprocClusterDelete(dag)
+# DeleteCluster = NessDataprocClusterDelete(delegate_to=default_account, dag=dag)
 
 inicio.set_downstream(CreateCluster)
 CreateCluster.set_downstream([OnlineCustomer, GemcoCustomer])
