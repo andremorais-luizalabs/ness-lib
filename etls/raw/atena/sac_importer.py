@@ -19,7 +19,6 @@ schema = spark.read.option("delimiter", "|") \
 sac_df = spark.readStream.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/sac_atendimento/", schema=schema)
 
-
 # Renaming and transforming columns
 sac = sac_df.select(
     col("_c0").alias("origem"),
@@ -39,8 +38,9 @@ sac = sac_df.select(
 # Stores in Parquet format
 squery = sac.writeStream.partitionBy("datalog") \
     .format("parquet") \
-    .trigger(once=True) \
-    .option("checkpointLocation", "gs://prd-lake-transient-atena/checkpoints/sac_atendimento/") \
+    .trigger(once=True).option(
+        "checkpointLocation",
+        "gs://prd-lake-transient-atena/checkpoints/sac_atendimento/") \
     .option("path", "gs://prd-lake-raw-atena/sac_calls/") \
     .start() \
     .awaitTermination()

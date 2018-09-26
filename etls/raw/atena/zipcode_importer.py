@@ -17,7 +17,6 @@ spark = SparkSession \
 cep_df = spark.read.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/cep_correio/")
 
-
 # Renaming and transforming columns
 cep = cep_df.select(
     col("_c0").alias("cep"),
@@ -32,7 +31,6 @@ cep = cep_df.select(
     col("_c9").alias("tipo_cep")
     ) \
     .withColumn("datalog", lit(datetime.date.today()))
-
 
 # Stores in Parquet format
 cep.write.mode("overwrite").parquet("gs://prd-lake-raw-atena/zipcode/")

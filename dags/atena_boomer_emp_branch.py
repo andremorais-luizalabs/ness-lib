@@ -11,16 +11,16 @@ from sness.airflow_utils.airflow_utils import DataprocClusterCreate, \
 default_args = {
     'owner': 'Data Engineering',
     'depends_on_past': False,
-    'description': '''Moves sales orders from transient to raw in Parket format,
-                      Calcutes the purchase profile for Mobile Vendas.''',
+    'description': '''Moves Sac and Siscob Informations
+    from transient to raw in Parket format.''',
     'retries': 5,
     'retry_delay': datetime.timedelta(seconds=10),
-    'start_date': datetime.datetime(2018, 9, 25),
+    'start_date': datetime.datetime(2018, 9, 26),
     'on_failure_callback': slack_failed_task,
 }
 
 # Dag definition
-dag = DAG('AtenaOrdersPurchaseProfile',
+dag = DAG('AtenaBoomerEmpBranch',
           default_args=default_args,
           schedule_interval='0 6 * * * ',
           max_active_runs=1)
@@ -32,34 +32,22 @@ end = DummyOperator(task_id='End', dag=dag)
 # Create a Dataproc Cluster
 CreateCluster = DataprocClusterCreate(dag=dag)
 
-# Step of the Products Importer
-ErpProductImporter = DataProcPySparkOperator(
-    task_id='atena_erp_product_importer',
-    main='gs://prd-cluster-config/etls/raw/atena/erp_product_importer.py',
-    job_name='AtenaErpProductImporter',
+# Step of the SAC Importer
+BoomerangImporter = DataProcPySparkOperator(
+    task_id='atena_Boomerang_importer',
+    main='gs://prd-cluster-config/etls/raw/atena/boomerang_importer.py',
+    job_name='AtenaBoomerangImporter',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
     delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
     region='us-east1-b',
     dag=dag)
 
-# Step of the Orders Importer
-ErpOrderImporter = DataProcPySparkOperator(
-    task_id='atena_erp_order_importer',
-    main='gs://prd-cluster-config/etls/raw/atena/erp_order_importer.py',
-    job_name='AtenaErpOrderImporter',
-    cluster_name=DEFAULT_CLUSTER_NAME,
-    gcp_conn_id='google_cloud_default',
-    delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
-    region='us-east1-b',
-    dag=dag)
-
-# Step of the Calculate of the Purchase Profile
-PurchaseProfile = DataProcPySparkOperator(
-    task_id='atena_purchase_profile_mobven',
-    main='gs://prd-cluster-config/etls/trusted/' +
-    'atena/purchase_profile_mobilevendas.py',
-    job_name='AtenaPurchaseProfileMobVen',
+# Step of the Siscob Importer
+EmployeeBranchImporter = DataProcPySparkOperator(
+    task_id='atena_employee_branch_importer',
+    main='gs://prd-cluster-config/etls/raw/atena/employee_branch_importer.py',
+    job_name='AtenaEmployeeBranchImporter',
     cluster_name=DEFAULT_CLUSTER_NAME,
     gcp_conn_id='google_cloud_default',
     delegate_to='data-engineering@maga-bigdata.iam.gserviceaccount.com',
@@ -67,8 +55,8 @@ PurchaseProfile = DataProcPySparkOperator(
     dag=dag)
 
 # Delete the Dataproc Cluster
-DeleteCluster = DataprocClusterDelete(dag=dag)
+DeleteCluster = DataprocClusterDelete(dag)
 
 # Pipeline definition
-start >> CreateCluster >> ErpProductImporter >> ErpOrderImporter
-ErpOrderImporter >> PurchaseProfile >> DeleteCluster >> end
+start >> CreateCluster >> BoomerangImporter
+BoomerangImporter >> EmployeeBranchImporter >> DeleteCluster >> end

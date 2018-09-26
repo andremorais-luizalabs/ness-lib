@@ -58,8 +58,9 @@ if foundListType:
 # Loads the contacts using readStream
 contact_schema = spark.read.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/bumer_contato/").schema
-contact_df = spark.readStream.option("delimiter", "|") \
-    .csv("gs://prd-lake-transient-atena/atena/bumer_contato/", schema=contact_schema)
+contact_df = spark.readStream.option("delimiter", "|").csv(
+    "gs://prd-lake-transient-atena/atena/bumer_contato/",
+    schema=contact_schema)
 
 # Renaming and transforming columns
 contact = contact_df.selectExpr(
@@ -84,8 +85,9 @@ contact = contact_df.selectExpr(
 # Stores in Parquet format
 squery = contact.writeStream.partitionBy("dtacontato") \
     .format("parquet") \
-    .trigger(once=True) \
-    .option("checkpointLocation", "gs://prd-lake-transient-atena/checkpoints/bumer_contato/") \
+    .trigger(once=True).option(
+        "checkpointLocation",
+        "gs://prd-lake-transient-atena/checkpoints/bumer_contato/") \
     .option("path", "gs://prd-lake-raw-atena/boomer_contact/") \
     .start() \
     .awaitTermination()
@@ -94,8 +96,9 @@ squery = contact.writeStream.partitionBy("dtacontato") \
 # Loads the customer list type using readStream
 cust_list_type_schema = spark.read.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/bumer_cli_tipo_lista/").schema
-cust_list_type_df = spark.readStream.option("delimiter", "|") \
-    .csv("gs://prd-lake-transient-atena/atena/bumer_cli_tipo_lista/", schema=cust_list_type_schema)
+cust_list_type_df = spark.readStream.option("delimiter", "|").csv(
+    "gs://prd-lake-transient-atena/atena/bumer_cli_tipo_lista/",
+    schema=cust_list_type_schema)
 
 # Renaming and transforming columns
 cust_list_type = cust_list_type_df.selectExpr(
@@ -113,8 +116,9 @@ cust_list_type = cust_list_type_df.selectExpr(
 # Stores in Parquet format
 squery = cust_list_type.writeStream.partitionBy("intidtipolista") \
     .format("parquet") \
-    .trigger(once=True) \
-    .option("checkpointLocation", "gs://prd-lake-transient-atena/checkpoints/bumer_cli_tipo_lista/") \
+    .trigger(once=True).option(
+        "checkpointLocation",
+        "gs://prd-lake-transient-atena/checkpoints/bumer_cli_tipo_lista/") \
     .option("path", "gs://prd-lake-raw-atena/boomer_cust_list_type/") \
     .start() \
     .awaitTermination()
