@@ -16,8 +16,9 @@ spark = SparkSession \
 # Loads the data using readStream
 order_schema = spark.read.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/gemco_pedido/").schema
-order_df = spark.readStream.option("delimiter", "|") \
-    .csv("gs://prd-lake-transient-atena/atena/gemco_pedido/", schema=order_schema)
+order_df = spark.readStream.option("delimiter", "|").csv(
+    "gs://prd-lake-transient-atena/atena/gemco_pedido/",
+    schema=order_schema)
 
 # Renaming and transforming columns
 order = order_df.selectExpr(
@@ -74,8 +75,9 @@ order = order_df.selectExpr(
 # Stores in Parquet format
 squery = order.writeStream.partitionBy("dtpedido") \
     .format("parquet") \
-    .trigger(once=True) \
-    .option("checkpointLocation", "gs://prd-lake-transient-atena/checkpoints/gemco_pedido/") \
+    .trigger(once=True).option(
+        "checkpointLocation",
+        "gs://prd-lake-transient-atena/checkpoints/gemco_pedido/") \
     .option("path", "gs://prd-lake-raw-atena/erp_order/") \
     .start() \
     .awaitTermination()
@@ -84,8 +86,9 @@ squery = order.writeStream.partitionBy("dtpedido") \
 # Loads the Order Details files using readStream
 detail_schema = spark.read.option("delimiter", "|") \
     .csv("gs://prd-lake-transient-atena/atena/gemco_pedido_item/").schema
-detail_df = spark.readStream.option("delimiter", "|") \
-    .csv("gs://prd-lake-transient-atena/atena/gemco_pedido_item/", schema=detail_schema)
+detail_df = spark.readStream.option("delimiter", "|").csv(
+    "gs://prd-lake-transient-atena/atena/gemco_pedido_item/",
+    schema=detail_schema)
 
 # Renaming and transforming columns
 detail = detail_df.selectExpr(
@@ -118,8 +121,9 @@ detail = detail_df.selectExpr(
 # Stores in Parquet format
 squery = detail.writeStream.partitionBy("etl_id") \
     .format("parquet") \
-    .trigger(once=True) \
-    .option("checkpointLocation", "gs://prd-lake-transient-atena/checkpoints/gemco_pedido_item/") \
+    .trigger(once=True).option(
+        "checkpointLocation",
+        "gs://prd-lake-transient-atena/checkpoints/gemco_pedido_item/") \
     .option("path", "gs://prd-lake-raw-atena/erp_order_detail/") \
     .start() \
     .awaitTermination()
